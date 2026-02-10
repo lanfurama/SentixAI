@@ -37,7 +37,7 @@ export async function analyzeReviews(id, restaurantName, csvData, context = 'ite
       points: { type: Type.ARRAY, items: sentimentPointSchema },
       summary: {
         type: Type.STRING,
-        description: 'One sentence key takeaway in Vietnamese for this category. Max 15–20 words. Required.',
+        description: 'One sentence key takeaway in Vietnamese. Max 12–15 words. Required.',
       },
     },
     required: ['points', 'summary'],
@@ -59,35 +59,19 @@ export async function analyzeReviews(id, restaurantName, csvData, context = 'ite
     required: ['service', 'food', 'value', 'atmosphere', 'overallRating'],
   };
 
-  const contextInstruction =
-    context === 'table'
-      ? `You are analyzing one of several locations for a comparison table. Keep output very concise and consistent so it can be compared side-by-side. Emphasize summary; use minimal points (max 3 per category).`
-      : `You are doing a single-location analysis. Use one short keyTakeaway if there is a dominant theme; otherwise keep the same concise format. Max 3–4 points per category.`;
+  const isTable = context === 'table';
+  const contextInstruction = isTable
+    ? `Comparison table mode: concise, max 3 points/category, summary in Vietnamese (12–15 words).`
+    : `Single-location: max 3–4 points/category, optional keyTakeaway if dominant theme.`;
 
-  const prompt = `
-    Analyze the provided CSV review data for "${restaurantName}".
-    Your task is to identify the most significant trends and insights for each category.
+  const prompt = `Analyze CSV reviews for "${restaurantName}". Identify trends per category.
+${contextInstruction}
+Rules: Summary = main takeaway (Vietnamese, 12–15 words). Points = short bullets, max 12 words each. Consolidate similar comments. No duplicates.
+Categories: 1) Service (staff, speed, parking). 2) Food/Products (taste, quality, dishes). 3) Value (price, promotions). 4) Atmosphere (cleanliness, decor, facilities).
+Output JSON per schema.
 
-    ${contextInstruction}
-
-    Guidelines:
-    1. **Summary is the main takeaway**: For each category, output a required "summary" (one sentence in Vietnamese, max 15–20 words). The summary is the primary insight; points are short supporting bullets. Prefer a strong summary over adding more points.
-    2. **Limit points**: Maximum 3–4 distinct insights per category; each point under 12 words. Prioritize the most repeated and impactful themes.
-    3. **Consolidate**: Group similar comments into a single, concise insight. Do not list every individual review.
-    4. **No Duplicates**: Ensure points are distinct.
-    5. **keyTakeaway**: If the data suggests one dominant strength or weakness across categories, set keyTakeaway to that (max 20 words); otherwise omit or leave brief.
-
-    Categories:
-    1. Service (Dịch vụ): Staff attitude, speed, security, parking staff.
-    2. Food/Products (Sản phẩm/Dịch vụ): Taste, variety, freshness, quality, specific dishes.
-    3. Value (Giá trị): Price vs quality, promotions, hidden costs (parking).
-    4. Atmosphere (Không gian/Tiện ích): Vibe, cleanliness, decor, noise, facilities (AC, Wifi, seats).
-
-    Output Schema matches the JSON structure provided.
-
-    CSV Data:
-    ${csvData.substring(0, 30000)}
-  `;
+CSV:
+${csvData.substring(0, 22000)}`;
 
   const response = await ai.models.generateContent({
     model: modelName,

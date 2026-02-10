@@ -1,7 +1,7 @@
 
 import { Review } from '../types';
 
-const parseCSV = (text: string): string[][] => {
+export const parseCSV = (text: string): string[][] => {
   const rows: string[][] = [];
   let currentRow: string[] = [];
   let currentCell = '';

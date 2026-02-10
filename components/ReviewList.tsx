@@ -1,34 +1,35 @@
 
 import React, { useMemo, useState } from 'react';
 import { RawReviewData, TimeFilter } from '../types';
-import { SAMPLE_DATA_ANCHOR_DATE, TIME_FILTER_OPTIONS } from '../constants';
+import { LAST_WEEK_FILTER_VALUE, TIME_FILTER_OPTIONS } from '../constants';
 import { parseReviews } from '../utils/csvParser';
 import { parseDate } from '../utils/csvFilter';
-import { ArrowLeft, Star, Calendar, MessageSquare, Upload } from 'lucide-react';
+import { ArrowLeft, Star, Calendar, MessageSquare } from 'lucide-react';
 
 interface Props {
   reviewData: RawReviewData;
   onBack: () => void;
-  onImportCsv: () => void;
 }
 
-export const ReviewList: React.FC<Props> = ({ reviewData, onBack, onImportCsv }) => {
+export const ReviewList: React.FC<Props> = ({ reviewData, onBack }) => {
   const [timeFilter, setTimeFilter] = useState<TimeFilter>('all');
 
   // Parse, Filter, Sort (newest first)
   const reviews = useMemo(() => {
     const allReviews = parseReviews(reviewData.csvContent);
-
+    const now = new Date();
     let filtered = allReviews;
     if (timeFilter !== 'all') {
-      const now = new Date(SAMPLE_DATA_ANCHOR_DATE);
-      const months = parseFloat(timeFilter);
-      const DAYS_PER_MONTH = 31;
-      const cutoff = new Date(now.getTime() - months * DAYS_PER_MONTH * 24 * 60 * 60 * 1000);
-      filtered = allReviews.filter(r => parseDate(r.date) >= cutoff);
+      const cutoff =
+        timeFilter === LAST_WEEK_FILTER_VALUE
+          ? new Date(now.getFullYear(), now.getMonth(), 1)
+          : new Date(now.getTime() - parseFloat(timeFilter) * 30 * 24 * 60 * 60 * 1000);
+      filtered = allReviews.filter(r => {
+        const parsed = parseDate(r.date, now);
+        return parsed >= cutoff && parsed <= now;
+      });
     }
-
-    return [...filtered].sort((a, b) => parseDate(b.date).getTime() - parseDate(a.date).getTime());
+    return [...filtered].sort((a, b) => parseDate(b.date, now).getTime() - parseDate(a.date, now).getTime());
   }, [reviewData.csvContent, timeFilter]);
 
   const ratingCounts = useMemo(() => {
@@ -68,13 +69,6 @@ export const ReviewList: React.FC<Props> = ({ reviewData, onBack, onImportCsv })
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-          <button
-            onClick={onImportCsv}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 sm:py-2 min-h-[44px] sm:min-h-0 bg-slate-900 hover:bg-slate-800 text-white rounded-md text-xs sm:text-sm font-bold transition-all active:scale-[0.98] touch-manipulation shrink-0"
-          >
-            <Upload size={16} />
-            Import CSV
-          </button>
           <div className="relative flex items-center bg-gray-50 border-2 border-gray-300 rounded-md px-3 py-2.5 sm:py-2 min-h-[44px] sm:min-h-0 hover:border-emerald-300 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-emerald-500 transition-all shrink-0 w-full sm:w-auto">
             <Calendar size={18} className="text-gray-400 mr-2 sm:w-4 sm:h-4 shrink-0" />
             <select

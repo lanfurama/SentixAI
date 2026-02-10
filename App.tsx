@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useParams, Link } from 'react-router-dom';
 import { ComparisonTable } from './components/ComparisonTable';
 import { ReviewList } from './components/ReviewList';
-import { CsvPreviewModal } from './components/CsvPreviewModal';
 import { DashboardHome } from './components/DashboardHome';
 import { TypeDashboard } from './components/TypeDashboard';
 import { RETAIL_STORE_IDS, SUPERMARKET_IDS } from './constants';
 import { ComparisonRow, TimeFilter, RawReviewData } from './types';
-import { fetchDatasets, fetchComparison, fetchDataset, analyzeWithApi, updateDatasetCsv, saveComparisonUpdates } from './services/api';
+import { fetchDatasets, fetchComparison, fetchDataset, analyzeWithApi, saveComparisonUpdates } from './services/api';
 import { filterCsvByTime } from './utils/csvFilter';
 import { createEmptyComparisonRow } from './utils/comparisonRow';
-import { mergeReviewsInCsv } from './utils/csvMerge';
 import { BrainCircuit, AlertCircle, Sparkles } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -21,51 +19,6 @@ const App: React.FC = () => {
   const [analyzingGroups, setAnalyzingGroups] = useState<Set<string>>(new Set());
   const [analyzingItemId, setAnalyzingItemId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [previewFile, setPreviewFile] = useState<{ name: string; content: string } | null>(null);
-  const [targetImportItem, setTargetImportItem] = useState<{ id: string; name: string } | null>(null);
-
-  const requestImport = (item: { id: string; name: string }) => {
-    setTargetImportItem(item);
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setPreviewFile({ name: file.name, content: (event.target?.result as string) || '' });
-    };
-    reader.readAsText(file);
-    e.target.value = '';
-  };
-
-  const confirmImport = async () => {
-    if (!previewFile || !targetImportItem) return;
-    const existing = rawDatasets.find(ds => ds.id === targetImportItem.id);
-    const mergedCsv = existing?.csvContent
-      ? mergeReviewsInCsv(existing.csvContent, previewFile.content)
-      : previewFile.content;
-
-    try {
-      await updateDatasetCsv(targetImportItem.id, mergedCsv, targetImportItem.name);
-      setRawDatasets(prev =>
-        existing
-          ? prev.map(ds => (ds.id === targetImportItem.id ? { ...ds, csvContent: mergedCsv } : ds))
-          : [...prev, { id: targetImportItem.id, name: targetImportItem.name, csvContent: mergedCsv }]
-      );
-      if (!data.some(r => r.id === targetImportItem.id)) {
-        setData(prev => [createEmptyComparisonRow(targetImportItem.id, targetImportItem.name), ...prev]);
-      }
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Không thể lưu vào file. Kiểm tra server đang chạy.');
-    }
-    setPreviewFile(null);
-    setTargetImportItem(null);
-  };
 
   useEffect(() => {
     let cancelled = false;
@@ -146,22 +99,24 @@ const App: React.FC = () => {
         });
       }
 
-      // Step 2: Analyze sequentially (avoid Gemini rate limit)
+      // Step 2: Analyze with concurrency limit (2) to balance speed vs Gemini rate limit
+      const ANALYZE_CONCURRENCY = 2;
       const months = filter === 'all' ? 'all' : parseFloat(filter);
-      for (const dataset of datasets) {
+      const analyzeOne = async (dataset: RawReviewData): Promise<ComparisonRow> => {
+        const filteredCsv = filterCsvByTime(dataset.csvContent, months);
+        const rowCount = filteredCsv.trim().split('\n').length;
+        if (rowCount <= 1) return createEmptyComparisonRow(dataset.id, dataset.name);
         try {
-          const filteredCsv = filterCsvByTime(dataset.csvContent, months);
-          const rowCount = filteredCsv.trim().split('\n').length;
-          if (rowCount <= 1) {
-            newResults.push(createEmptyComparisonRow(dataset.id, dataset.name));
-            continue;
-          }
-          const result = await analyzeWithApi(dataset.id, dataset.name, filteredCsv, 'table');
-          newResults.push(result);
+          return await analyzeWithApi(dataset.id, dataset.name, filteredCsv, 'table');
         } catch (e) {
           console.error(`Failed to analyze ${dataset.name}`, e);
-          newResults.push(createEmptyComparisonRow(dataset.id, dataset.name));
+          return createEmptyComparisonRow(dataset.id, dataset.name);
         }
+      };
+      for (let i = 0; i < datasets.length; i += ANALYZE_CONCURRENCY) {
+        const chunk = datasets.slice(i, i + ANALYZE_CONCURRENCY);
+        const chunkResults = await Promise.all(chunk.map(analyzeOne));
+        newResults.push(...chunkResults);
       }
 
       // Step 3: Merge into state
@@ -274,14 +229,6 @@ const App: React.FC = () => {
             element={
               <>
                 <Header error={error} apiReady={apiReady} />
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
-                  accept=".csv"
-                  className="hidden"
-                  aria-hidden="true"
-                />
                 {restaurants.length > 0 && (
                   <ComparisonTable
                     title="Dining & Venues Analysis"
@@ -326,24 +273,8 @@ const App: React.FC = () => {
           />
           <Route path="/dashboard" element={<DashboardHome />} />
           <Route path="/dashboard/:type" element={<TypeDashboard />} />
-          <Route
-            path="/reviews/:resortId"
-            element={
-              <ReviewsPage
-                requestImport={requestImport}
-              />
-            }
-          />
+          <Route path="/reviews/:resortId" element={<ReviewsPage />} />
         </Routes>
-
-        <CsvPreviewModal
-          isOpen={!!previewFile}
-          fileName={previewFile?.name || ''}
-          csvContent={previewFile?.content || ''}
-          targetItemName={targetImportItem?.name}
-          onClose={() => { setPreviewFile(null); setTargetImportItem(null); }}
-          onConfirm={confirmImport}
-        />
       </div>
     </div>
   );
@@ -390,7 +321,7 @@ function Header({ error, apiReady }: { error: string | null; apiReady: boolean }
   );
 }
 
-function ReviewsPage({ requestImport }: { requestImport: (item: { id: string; name: string }) => void }) {
+function ReviewsPage() {
   const { resortId } = useParams<{ resortId: string }>();
   const navigate = useNavigate();
   const [reviewData, setReviewData] = useState<RawReviewData | null>(null);
@@ -439,13 +370,7 @@ function ReviewsPage({ requestImport }: { requestImport: (item: { id: string; na
       </div>
     );
   }
-  return (
-    <ReviewList
-      reviewData={reviewData}
-      onBack={() => navigate('/')}
-      onImportCsv={() => requestImport({ id: reviewData.id, name: reviewData.name })}
-    />
-  );
+  return <ReviewList reviewData={reviewData} onBack={() => navigate('/')} />;
 }
 
 export default App;

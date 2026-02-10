@@ -1,72 +1,103 @@
 import { SAMPLE_DATA_ANCHOR_DATE } from '../constants';
+import { parseCSV } from './csvParser';
 
 /**
  * Parses relative and absolute date strings into Date objects.
- * Handles: "3 weeks ago", "8 hours ago", "a day ago", "2026-01-10 15:14:45", "23 hours ago"
+ * Handles: "3 weeks ago", ISO strings, Unix timestamp, dd/mm/yyyy, dd-mm-yyyy.
  * @param dateStr - Raw date string from CSV
  * @param referenceDate - "Now" for relative dates; defaults to SAMPLE_DATA_ANCHOR_DATE for demo consistency
  */
 export const parseDate = (dateStr: string, referenceDate?: Date): Date => {
   const now = referenceDate ?? new Date(SAMPLE_DATA_ANCHOR_DATE);
-  const s = dateStr.toLowerCase().trim();
+  const s = dateStr.trim();
+  const lower = s.toLowerCase();
 
-  // Try parsing absolute ISO-like format first
-  const absoluteDate = new Date(dateStr);
-  if (!isNaN(absoluteDate.getTime())) return absoluteDate;
+  // Unix timestamp (seconds)
+  const unixSec = /^\d{10}$/.test(s) ? parseInt(s, 10) : NaN;
+  if (!isNaN(unixSec)) return new Date(unixSec * 1000);
 
-  // Handle relative formats
-  const numMatch = s.match(/\d+/);
+  // Relative formats
+  const numMatch = lower.match(/\d+/);
   const num = numMatch ? parseInt(numMatch[0]) : 1;
+  if (lower.includes('hour')) return new Date(now.getTime() - num * 60 * 60 * 1000);
+  if (lower.includes('day')) return new Date(now.getTime() - num * 24 * 60 * 60 * 1000);
+  if (lower.includes('week')) return new Date(now.getTime() - num * 7 * 24 * 60 * 60 * 1000);
+  if (lower.includes('month')) return new Date(now.getTime() - num * 30 * 24 * 60 * 60 * 1000);
+  if (lower.includes('year')) return new Date(now.getTime() - num * 365 * 24 * 60 * 60 * 1000);
 
-  if (s.includes('hour')) return new Date(now.getTime() - num * 60 * 60 * 1000);
-  if (s.includes('day')) return new Date(now.getTime() - num * 24 * 60 * 60 * 1000);
-  if (s.includes('week')) return new Date(now.getTime() - num * 7 * 24 * 60 * 60 * 1000);
-  if (s.includes('month')) return new Date(now.getTime() - num * 30 * 24 * 60 * 60 * 1000);
-  if (s.includes('year')) return new Date(now.getTime() - num * 365 * 24 * 60 * 60 * 1000);
+  // dd/mm/yyyy or dd-mm-yyyy (Vietnam/EU format) - new Date() parses mm/dd/yyyy in US locale
+  const dmyMatch = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})(?:\s|T|$)/);
+  if (dmyMatch) {
+    const [, d, m, y] = dmyMatch;
+    const day = parseInt(d!, 10);
+    const month = parseInt(m!, 10) - 1;
+    const year = parseInt(y!, 10);
+    if (month >= 0 && month <= 11 && day >= 1 && day <= 31) {
+      const parsed = new Date(year, month, day);
+      if (!isNaN(parsed.getTime())) return parsed;
+    }
+  }
+
+  // yyyy-mm-dd or ISO
+  const absoluteDate = new Date(s);
+  if (!isNaN(absoluteDate.getTime())) return absoluteDate;
 
   return now;
 };
 
-const findHeaderRowIndex = (rows: string[]): number => {
+const findHeaderRowIndex = (rows: string[][]): number => {
   for (let i = 0; i < Math.min(rows.length, 10); i++) {
-    const lower = rows[i].toLowerCase();
+    const lower = rows[i].map(c => c.toLowerCase()).join(' ');
     if (lower.includes('reviewer') || lower.includes('author')) return i;
   }
   return 0;
 };
 
-/** Days per "month" for filter windows (Last Week = 0.25 * 30 ≈ 7.5 days, Last Month = 30, etc.) */
+/** Days per "month" for filter windows (Last Month = 30, etc.) */
 const DAYS_PER_MONTH = 30;
+
+/** Last Week = from 1st of current month to today (e.g. 10/02 → 01/02–10/02) */
+const LAST_WEEK_MONTHS = 0.25;
+
+/** Serialize rows back to CSV string */
+const rowsToCsv = (headerRow: string[], dataRows: string[][]): string => {
+  const toLine = (cells: string[]) =>
+    cells.map(c => (/[,"\n\r]/.test(c) ? `"${c.replace(/"/g, '""')}"` : c)).join(',');
+  return [toLine(headerRow), ...dataRows.map(toLine)].join('\n');
+};
 
 /**
  * Filters CSV to only rows whose date falls within the last N months from today.
  * When user selects "Last Month", only data from that window is sent to analyze — correct and minimal.
+ * Uses parseCSV for robust handling of content with commas.
  */
 export const filterCsvByTime = (csvContent: string, months: number | 'all'): string => {
   if (months === 'all') return csvContent;
 
-  const rows = csvContent.trim().split('\n');
+  const rows = parseCSV(csvContent.trim());
   if (rows.length < 2) return csvContent;
 
   const headerRowIdx = findHeaderRowIndex(rows);
-  const header = rows[headerRowIdx];
-  const columns = header.toLowerCase().split(',').map(c => c.trim());
+  const headerRow = rows[headerRowIdx];
+  const columns = headerRow.map(h => h.toLowerCase().trim());
   const dateIdx = columns.findIndex(c => c === 'commented_at' || c === 'time' || c === 'date');
 
   if (dateIdx === -1) return csvContent;
 
   const now = new Date();
-  const cutoff = new Date(now.getTime() - months * DAYS_PER_MONTH * 24 * 60 * 60 * 1000);
+  const cutoff =
+    months === LAST_WEEK_MONTHS
+      ? new Date(now.getFullYear(), now.getMonth(), 1)
+      : new Date(now.getTime() - months * DAYS_PER_MONTH * 24 * 60 * 60 * 1000);
 
   const filteredRows = rows.slice(headerRowIdx + 1).filter(row => {
-    const cells = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-    const dateValue = cells[dateIdx]?.replace(/"/g, '').trim();
+    const dateValue = row[dateIdx]?.replace(/"/g, '').trim();
     if (!dateValue) return false;
     const parsed = parseDate(dateValue, now);
     return parsed >= cutoff && parsed <= now;
   });
 
-  return [header, ...filteredRows].join('\n');
+  return rowsToCsv(headerRow, filteredRows);
 };
 
 /**
@@ -80,12 +111,12 @@ export const filterCsvByTimeRange = (
 ): string => {
   if (startMonthsAgo <= endMonthsAgo) return '';
 
-  const rows = csvContent.trim().split('\n');
+  const rows = parseCSV(csvContent.trim());
   if (rows.length < 2) return '';
 
   const headerRowIdx = findHeaderRowIndex(rows);
-  const header = rows[headerRowIdx];
-  const columns = header.toLowerCase().split(',').map(c => c.trim());
+  const headerRow = rows[headerRowIdx];
+  const columns = headerRow.map(h => h.toLowerCase().trim());
   const dateIdx = columns.findIndex(c => c === 'commented_at' || c === 'time' || c === 'date');
 
   if (dateIdx === -1) return '';
@@ -95,14 +126,13 @@ export const filterCsvByTimeRange = (
   const endCutoff = new Date(now.getTime() - endMonthsAgo * DAYS_PER_MONTH * 24 * 60 * 60 * 1000);
 
   const filteredRows = rows.slice(headerRowIdx + 1).filter(row => {
-    const cells = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-    const dateValue = cells[dateIdx]?.replace(/"/g, '').trim();
+    const dateValue = row[dateIdx]?.replace(/"/g, '').trim();
     if (!dateValue) return false;
     const parsed = parseDate(dateValue, now);
     return parsed >= startCutoff && parsed < endCutoff;
   });
 
-  return [header, ...filteredRows].join('\n');
+  return rowsToCsv(headerRow, filteredRows);
 };
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
@@ -118,12 +148,12 @@ export const filterCsvByDaysRange = (
 ): string => {
   if (startDaysAgo <= endDaysAgo) return '';
 
-  const rows = csvContent.trim().split('\n');
+  const rows = parseCSV(csvContent.trim());
   if (rows.length < 2) return '';
 
   const headerRowIdx = findHeaderRowIndex(rows);
-  const header = rows[headerRowIdx];
-  const columns = header.toLowerCase().split(',').map(c => c.trim());
+  const headerRow = rows[headerRowIdx];
+  const columns = headerRow.map(h => h.toLowerCase().trim());
   const dateIdx = columns.findIndex(c => c === 'commented_at' || c === 'time' || c === 'date');
 
   if (dateIdx === -1) return '';
@@ -133,12 +163,11 @@ export const filterCsvByDaysRange = (
   const endCutoff = new Date(now.getTime() - endDaysAgo * MS_PER_DAY);
 
   const filteredRows = rows.slice(headerRowIdx + 1).filter(row => {
-    const cells = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-    const dateValue = cells[dateIdx]?.replace(/"/g, '').trim();
+    const dateValue = row[dateIdx]?.replace(/"/g, '').trim();
     if (!dateValue) return false;
     const parsed = parseDate(dateValue, now);
     return parsed >= startCutoff && parsed < endCutoff;
   });
 
-  return [header, ...filteredRows].join('\n');
+  return rowsToCsv(headerRow, filteredRows);
 };

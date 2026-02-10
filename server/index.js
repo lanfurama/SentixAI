@@ -77,13 +77,15 @@ function commentsToCsv(comments) {
 }
 
 /**
- * Extract comments array from API response. Handles { data: [] }, { results: [] }, or direct array.
+ * Extract comments array from API response. Handles { data: [] }, { results: [] }, { items: [] }, { comments: [] }, or direct array.
  */
 function extractComments(body) {
   if (Array.isArray(body)) return body;
   if (body?.data && Array.isArray(body.data)) return body.data;
   if (body?.results && Array.isArray(body.results)) return body.results;
   if (body?.comments && Array.isArray(body.comments)) return body.comments;
+  if (body?.items && Array.isArray(body.items)) return body.items;
+  if (body?.list && Array.isArray(body.list)) return body.list;
   return [];
 }
 
@@ -124,23 +126,24 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
-/** GET /api/datasets - Fetch from external API per resort, return RawReviewData[] (id, name, csvContent) */
+/** GET /api/datasets - Fetch from external API per resort in parallel, return RawReviewData[] (id, name, csvContent) */
 app.get('/api/datasets', async (req, res) => {
-  const datasets = [];
-  for (const resort of RESORT_LIST) {
-    try {
-      const url = `${EXTERNAL_API_BASE}/${resort.id}`;
-      const resp = await fetch(url);
-      const body = resp.ok ? await resp.json().catch(() => ({})) : {};
-      const comments = extractComments(body);
-      const csvContent = commentsToCsv(comments);
-      datasets.push({ id: resort.id, name: resort.name, csvContent });
-    } catch (err) {
-      console.warn(`Failed to fetch comments for resort ${resort.id} (${resort.name}):`, err.message);
-      datasets.push({ id: resort.id, name: resort.name, csvContent: 'author,date,content,rating,source\n' });
-    }
-  }
-  res.json(datasets);
+  const results = await Promise.all(
+    RESORT_LIST.map(async (resort) => {
+      try {
+        const url = `${EXTERNAL_API_BASE}/${resort.id}`;
+        const resp = await fetch(url);
+        const body = resp.ok ? await resp.json().catch(() => ({})) : {};
+        const comments = extractComments(body);
+        const csvContent = commentsToCsv(comments);
+        return { id: resort.id, name: resort.name, csvContent };
+      } catch (err) {
+        console.warn(`Failed to fetch comments for resort ${resort.id} (${resort.name}):`, err.message);
+        return { id: resort.id, name: resort.name, csvContent: 'author,date,content,rating,source\n' };
+      }
+    })
+  );
+  res.json(results);
 });
 
 /** GET /api/datasets/:resortId - Fetch one resort's comments from external API, return RawReviewData */
