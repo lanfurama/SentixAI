@@ -1,0 +1,5 @@
+{
+  "name": "Review Comparison System",
+  "description": "A system to analyze customer reviews from CSV data and generate a detailed comparison table of sentiment across different categories using Gemini AI.",
+  "requestFramePermissions": []
+}

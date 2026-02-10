@@ -1,0 +1,33 @@
+{
+  "name": "review-comparison-system",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -n vite,api \"vite\" \"npm run server\"",
+    "dev:vite": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "export-data": "tsx scripts/export-data.ts",
+    "server": "node server/index.js"
+  },
+  "dependencies": {
+    "@google/genai": "^1.35.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.1",
+    "lucide-react": "^0.562.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-router-dom": "^7.13.0",
+    "recharts": "^3.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "concurrently": "^9.1.0",
+    "tsx": "^4.19.2",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  }
+}

@@ -1,0 +1,14 @@
+/* Safe area for notched devices (mobile) */
+.safe-area-padding {
+  padding-left: max(0.75rem, env(safe-area-inset-left, 0px));
+  padding-right: max(0.75rem, env(safe-area-inset-right, 0px));
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+  padding-top: max(0.75rem, env(safe-area-inset-top, 0px));
+}
+
+/* Prevent zoom on input focus on iOS when font-size >= 16px */
+@media screen and (max-width: 768px) {
+  select {
+    font-size: 16px;
+  }
+}

@@ -1,0 +1,5 @@
+GOOGLE_CLOUD_PROJECT=your_project_id
+GOOGLE_CLOUD_LOCATION=us-central1
+VERTEX_AI_SERVICE_ACCOUNT_PATH=path\to\service-account.json
+VERTEX_AI_ENDPOINT_ID=your_endpoint_id
+VERTEX_AI_API_KEY=your_vertex_ai_api_key
