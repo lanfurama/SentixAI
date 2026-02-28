@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ComparisonRow, CategoryAnalysis, TimeFilter, RawReviewData } from '../types';
 import { TIME_FILTER_OPTIONS } from '../constants';
@@ -67,6 +67,18 @@ const CategoryCell: React.FC<{ category: CategoryAnalysis }> = ({ category }) =>
 export const ComparisonTable: React.FC<Props> = ({ data, title, variant = 'restaurant', rawDatasets, onAnalyze, isAnalyzing, onAnalyzeItem, analyzingItemId }) => {
   const [localFilter, setLocalFilter] = useState<TimeFilter>('1');
 
+  // Memoize review counts and ratings for each row to avoid recalculating on every render
+  const rowStats = useMemo(() => {
+    const stats = new Map<string, { totalReviews: number; displayRating: number }>();
+    data.forEach((row) => {
+      stats.set(row.id, {
+        totalReviews: getReviewCount(row.id, rawDatasets, localFilter),
+        displayRating: getAverageRatingFromRaw(row.id, rawDatasets, localFilter),
+      });
+    });
+    return stats;
+  }, [data, rawDatasets, localFilter]);
+
   let headers = {
     location: "Location",
     totalReviews: "Total review",
@@ -127,8 +139,8 @@ export const ComparisonTable: React.FC<Props> = ({ data, title, variant = 'resta
       {/* Mobile: card layout */}
       <div className="md:hidden divide-y divide-gray-200">
         {data.map((row) => {
-          const totalReviews = getReviewCount(row.id, rawDatasets, localFilter);
-          const displayRating = getAverageRatingFromRaw(row.id, rawDatasets, localFilter);
+          const stats = rowStats.get(row.id) ?? { totalReviews: 0, displayRating: 0 };
+          const { totalReviews, displayRating } = stats;
           return (
           <div key={row.id} className="p-3 relative">
             {(isAnalyzing || analyzingItemId === row.id) && <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px] animate-pulse pointer-events-none z-[1] rounded-b-lg" />}
@@ -207,8 +219,8 @@ export const ComparisonTable: React.FC<Props> = ({ data, title, variant = 'resta
           </thead>
           <tbody>
             {data.map((row) => {
-              const totalReviews = getReviewCount(row.id, rawDatasets, localFilter);
-              const displayRating = getAverageRatingFromRaw(row.id, rawDatasets, localFilter);
+              const stats = rowStats.get(row.id) ?? { totalReviews: 0, displayRating: 0 };
+              const { totalReviews, displayRating } = stats;
               return (
               <tr key={row.id} className="border-b border-gray-200 hover:bg-[#fbfcfb] transition-colors group">
                 <td className="p-3 lg:p-4 align-top font-bold text-[14px] lg:text-[15px] text-[#111827] relative">

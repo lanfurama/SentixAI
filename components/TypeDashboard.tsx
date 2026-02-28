@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { fetchDatasets, fetchComparison } from '../services/api';
+import { fetchComparison } from '../services/api';
 import {
   BarChart,
   Bar,
@@ -11,7 +11,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { ComparisonRow, RawReviewData, TimeFilter, CategoryAnalysis } from '../types';
-import { RETAIL_STORE_IDS, SUPERMARKET_IDS, TIME_FILTER_OPTIONS } from '../constants';
+import { TIME_FILTER_OPTIONS } from '../constants';
 import { filterCsvByTime, filterCsvByTimeRange, filterCsvByDaysRange } from '../utils/csvFilter';
 import { parseReviews } from '../utils/csvParser';
 import { ArrowLeft, Calendar, List, Star, TrendingUp, TrendingDown, MapPin, MessageSquare, BarChart3 } from 'lucide-react';
@@ -107,11 +107,9 @@ const TYPE_META = {
 type DashboardType = keyof typeof TYPE_META;
 
 function filterDataByType(data: ComparisonRow[], type: string): ComparisonRow[] {
-  const isRetail = (id: string) => (RETAIL_STORE_IDS as readonly string[]).includes(id);
-  const isSupermarket = (id: string) => (SUPERMARKET_IDS as readonly string[]).includes(id);
-  if (type === 'dining') return data.filter((r) => !isRetail(r.id) && !isSupermarket(r.id));
-  if (type === 'retail') return data.filter((r) => isRetail(r.id));
-  if (type === 'supermarket') return data.filter((r) => isSupermarket(r.id));
+  if (type === 'dining') return data.filter((r) => r.concept === 'dining');
+  if (type === 'retail') return data.filter((r) => r.concept === 'retail');
+  if (type === 'supermarket') return data.filter((r) => r.concept === 'supermarket');
   return [];
 }
 
@@ -141,9 +139,10 @@ export const TypeDashboard: React.FC = () => {
       setLoading(true);
       setLoadError(null);
       try {
-        const [datasets, comparison] = await Promise.all([fetchDatasets(), fetchComparison()]);
+        // Only fetch comparison data initially (fast, from JSON file)
+        // Datasets will be fetched lazily when needed (on analyze)
+        const comparison = await fetchComparison();
         if (!cancelled) {
-          setRawDatasets(datasets);
           setData(comparison);
         }
       } catch (e) {

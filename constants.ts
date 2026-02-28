@@ -16,22 +16,5 @@ export const TIME_FILTER_OPTIONS: { value: TimeFilter; label: string }[] = [
   { value: '6', label: 'Last 6 Months' },
 ];
 
-/** IDs of venues treated as retail stores (resort_id). */
-export const RETAIL_STORE_IDS = ['17', '15', '22'] as const;
-
-/** IDs of venues treated as supermarkets / hypermarkets (resort_id). */
-export const SUPERMARKET_IDS = [
-  '23',
-  '21',
-  '10',
-  '1',
-  '16',
-  '11',
-  '12',
-  '26',
-  '27',
-  '25',
-  '29',
-  '28',
-  '24',
-] as const;
+// Note: SUPERMARKET_IDS and RETAIL_STORE_IDS have been moved to config/venues.js
+// Use getVenueIdsByConcept() from config/venues.js instead

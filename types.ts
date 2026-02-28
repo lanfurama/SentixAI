@@ -15,6 +15,8 @@ export interface ComparisonRow {
   location: string;
   /** Optional one-sentence overall strength or weakness for this location (max ~20 words). */
   keyTakeaway?: string;
+  /** Concept type: 'supermarket', 'retail', or 'dining' */
+  concept?: string;
   service: CategoryAnalysis;
   food: CategoryAnalysis;
   value: CategoryAnalysis;
@@ -26,6 +28,8 @@ export interface RawReviewData {
   id: string;
   name: string;
   csvContent: string;
+  /** Concept type: 'supermarket', 'retail', or 'dining' */
+  concept?: string;
 }
 
 export interface Review {

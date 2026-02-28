@@ -5,6 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { analyzeReviews } from './gemini.js';
+import { VENUES, getVenueById } from '../config/venues.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -13,31 +14,6 @@ const dataDir = path.join(root, 'data');
 const comparisonDataPath = path.join(dataDir, 'comparison-data.json');
 
 const EXTERNAL_API_BASE = 'http://phulonghotels.com:8000/api/public/phulong/mena_gourmet_market/comments';
-
-/** Resort list: id = resort_id (string), name = display name. Order as provided. */
-const RESORT_LIST = [
-  { id: '1', name: 'Mena Gourmet Market - Menas Mall Saigon Airport' },
-  { id: '10', name: 'Mena Gourmet Market - Celesta Rise' },
-  { id: '12', name: 'An Nam Gourmet Nguyễn Văn Trỗi' },
-  { id: '11', name: 'Menas Mall Saigon Airport' },
-  { id: '14', name: 'Lamue - Menas Mall' },
-  { id: '15', name: 'Mena Cosmetics & Perfumes' },
-  { id: '16', name: 'MenaWorld - Menas Mall' },
-  { id: '17', name: 'Sky Shop - Menas Mall' },
-  { id: '18', name: 'The Fan' },
-  { id: '19', name: 'V-Senses Dining Celesta Rise' },
-  { id: '20', name: 'Yum Food' },
-  { id: '21', name: 'Mena Gourmet market - 547 HTP' },
-  { id: '13', name: "Don Cipriani's Italian Restaurant" },
-  { id: '22', name: 'Saigon Oxford Bookstore - Menas Mall Saigon Airport' },
-  { id: '23', name: 'Mena Gourmet Market -313 Nguyễn Thị Thập' },
-  { id: '24', name: 'Siêu thị Emart - Phan Văn Trị' },
-  { id: '25', name: 'Annam Gourmet Riverpark Premier' },
-  { id: '26', name: 'Annam Gourmet - Saigon Centre - Takashimaya' },
-  { id: '27', name: 'Annam Gourmet - Saigon Pearl' },
-  { id: '28', name: 'Siêu thị Finelife Urban Hill' },
-  { id: '29', name: 'Siêu thị Finelife Riviera Point' },
-];
 
 /**
  * Normalize API comment item to { author, date, content, rating, source }.
@@ -122,76 +98,104 @@ function mergeComparisonCache(row) {
   return writeJson(comparisonDataPath, current);
 }
 
+/**
+ * Fetch venue data from external API and convert to RawReviewData format
+ * @param {Object} venue - Venue object with id, name, concept
+ * @returns {Promise<Object>} RawReviewData with id, name, csvContent, concept
+ */
+async function fetchVenueData(venue) {
+  try {
+    const url = `${EXTERNAL_API_BASE}/${venue.id}`;
+    console.log(`[API] Fetching: ${url}`);
+    const resp = await fetch(url);
+    if (!resp.ok) {
+      console.warn(`[API] HTTP ${resp.status} for venue ${venue.id} (${venue.name})`);
+      return { id: venue.id, name: venue.name, csvContent: 'author,date,content,rating,source\n', concept: venue.concept };
+    }
+    const body = await resp.json().catch(() => ({}));
+    const comments = extractComments(body);
+    const csvContent = commentsToCsv(comments);
+    return { id: venue.id, name: venue.name, csvContent, concept: venue.concept };
+  } catch (err) {
+    console.warn(`[API] Failed to fetch comments for venue ${venue.id} (${venue.name}):`, err.message);
+    console.warn(`[API] URL was: ${EXTERNAL_API_BASE}/${venue.id}`);
+    return { id: venue.id, name: venue.name, csvContent: 'author,date,content,rating,source\n', concept: venue.concept };
+  }
+}
+
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
-/** GET /api/datasets - Fetch from external API per resort in parallel, return RawReviewData[] (id, name, csvContent) */
+/** GET /api/datasets - Fetch from external API per venue in parallel, return RawReviewData[] (id, name, csvContent, concept) */
 app.get('/api/datasets', async (req, res) => {
-  const results = await Promise.all(
-    RESORT_LIST.map(async (resort) => {
-      try {
-        const url = `${EXTERNAL_API_BASE}/${resort.id}`;
-        const resp = await fetch(url);
-        const body = resp.ok ? await resp.json().catch(() => ({})) : {};
-        const comments = extractComments(body);
-        const csvContent = commentsToCsv(comments);
-        return { id: resort.id, name: resort.name, csvContent };
-      } catch (err) {
-        console.warn(`Failed to fetch comments for resort ${resort.id} (${resort.name}):`, err.message);
-        return { id: resort.id, name: resort.name, csvContent: 'author,date,content,rating,source\n' };
-      }
-    })
-  );
-  res.json(results);
+  try {
+    const results = await Promise.all(VENUES.map(fetchVenueData));
+    res.json(results);
+  } catch (err) {
+    console.error('[API] Error in GET /api/datasets:', err);
+    res.status(500).json({ error: err.message || 'Failed to fetch datasets' });
+  }
 });
 
-/** GET /api/datasets/:resortId - Fetch one resort's comments from external API, return RawReviewData */
+/** GET /api/datasets/:resortId - Fetch one venue's comments from external API, return RawReviewData */
 app.get('/api/datasets/:resortId', async (req, res) => {
-  const { resortId } = req.params;
-  const resort = RESORT_LIST.find((r) => r.id === resortId);
-  if (!resort) {
-    return res.status(404).json({ error: 'Resort not found' });
-  }
   try {
-    const url = `${EXTERNAL_API_BASE}/${resort.id}`;
-    const resp = await fetch(url);
-    const body = resp.ok ? await resp.json().catch(() => ({})) : {};
-    const comments = extractComments(body);
-    const csvContent = commentsToCsv(comments);
-    res.json({ id: resort.id, name: resort.name, csvContent });
+    const { resortId } = req.params;
+    if (!resortId || typeof resortId !== 'string') {
+      return res.status(400).json({ error: 'Invalid venue ID' });
+    }
+    const venue = getVenueById(resortId);
+    if (!venue) {
+      return res.status(404).json({ error: `Venue not found: ${resortId}` });
+    }
+    const result = await fetchVenueData(venue);
+    res.json(result);
   } catch (err) {
-    console.warn(`Failed to fetch comments for resort ${resort.id}:`, err.message);
-    res.json({ id: resort.id, name: resort.name, csvContent: 'author,date,content,rating,source\n' });
+    console.error('[API] Error in GET /api/datasets/:resortId:', err);
+    res.status(500).json({ error: err.message || 'Failed to fetch venue data' });
   }
 });
 
 /** GET /api/comparison - Initial comparison / analysis rows */
 app.get('/api/comparison', (req, res) => {
-  const data = readJson(comparisonDataPath, []);
-  res.json(data);
+  try {
+    const data = readJson(comparisonDataPath, []);
+    res.json(data);
+  } catch (err) {
+    console.error('[API] Error in GET /api/comparison:', err);
+    res.status(500).json({ error: err.message || 'Failed to load comparison data' });
+  }
 });
 
 /** PATCH /api/comparison - Merge updates (ComparisonRow[]) by id into comparison-data.json */
 app.patch('/api/comparison', (req, res) => {
-  const { updates } = req.body;
-  if (!Array.isArray(updates)) {
-    return res.status(400).json({ error: 'Missing or invalid updates array' });
-  }
-  const current = readJson(comparisonDataPath, []);
-  for (const row of updates) {
-    if (!row || typeof row.id !== 'string') continue;
-    const idx = current.findIndex((r) => r && r.id === row.id);
-    if (idx >= 0) {
-      current[idx] = row;
-    } else {
-      current.push(row);
+  try {
+    const { updates } = req.body;
+    if (!Array.isArray(updates)) {
+      return res.status(400).json({ error: 'Missing or invalid updates array' });
     }
+    const current = readJson(comparisonDataPath, []);
+    for (const row of updates) {
+      if (!row || typeof row.id !== 'string') {
+        console.warn('[API] Skipping invalid row in comparison update:', row);
+        continue;
+      }
+      const idx = current.findIndex((r) => r && r.id === row.id);
+      if (idx >= 0) {
+        current[idx] = row;
+      } else {
+        current.push(row);
+      }
+    }
+    if (!writeJson(comparisonDataPath, current)) {
+      return res.status(500).json({ error: 'Failed to save comparison data' });
+    }
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('[API] Error in PATCH /api/comparison:', err);
+    res.status(500).json({ error: err.message || 'Internal server error' });
   }
-  if (!writeJson(comparisonDataPath, current)) {
-    return res.status(500).json({ error: 'Failed to save comparison data' });
-  }
-  res.json({ ok: true });
 });
 
 /** PATCH /api/datasets - Disabled when using API source (Option A). Returns 501. */
@@ -201,18 +205,30 @@ app.patch('/api/datasets', (req, res) => {
 
 /** POST /api/analyze - Run Gemini analysis on CSV (body: { id, name, csvContent, context?: 'table'|'item' }). Saves result to comparison-data.json for cache. */
 app.post('/api/analyze', async (req, res) => {
-  const { id, name, csvContent, context } = req.body;
-  if (!id || !name || typeof csvContent !== 'string') {
-    return res.status(400).json({ error: 'Missing id, name, or csvContent' });
-  }
-  const analysisContext = context === 'table' ? 'table' : 'item';
   try {
+    const { id, name, csvContent, context } = req.body;
+    if (!id || typeof id !== 'string') {
+      return res.status(400).json({ error: 'Missing or invalid id' });
+    }
+    if (!name || typeof name !== 'string') {
+      return res.status(400).json({ error: 'Missing or invalid name' });
+    }
+    if (!csvContent || typeof csvContent !== 'string') {
+      return res.status(400).json({ error: 'Missing or invalid csvContent' });
+    }
+    const analysisContext = context === 'table' ? 'table' : 'item';
     const result = await analyzeReviews(id, name, csvContent, analysisContext);
+    // Add concept from VENUES config
+    const venue = getVenueById(id);
+    if (venue?.concept) {
+      result.concept = venue.concept;
+    }
     mergeComparisonCache(result);
     res.json(result);
   } catch (err) {
-    console.error('Analyze error:', err);
-    res.status(500).json({ error: err.message || 'Analysis failed' });
+    console.error('[API] Analyze error:', err);
+    const errorMessage = err.message || 'Analysis failed';
+    res.status(500).json({ error: errorMessage });
   }
 });
 
