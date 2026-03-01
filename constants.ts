@@ -4,7 +4,7 @@ import { TimeFilter } from './types';
 /** Anchor date for parsing relative dates in sample data (e.g. "3 weeks ago"). */
 export const SAMPLE_DATA_ANCHOR_DATE = '2026-01-11T12:00:00Z';
 
-/** Last Week = from 1st of current month to today (e.g. 10/02 → 01/02–10/02) */
+/** Last Week = last 7 days from today */
 export const LAST_WEEK_FILTER_VALUE = '0.25';
 
 /** Options for time filter dropdown (used in ComparisonTable and ReviewList). */

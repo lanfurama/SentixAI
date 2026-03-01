@@ -22,7 +22,7 @@ export const ReviewList: React.FC<Props> = ({ reviewData, onBack }) => {
     if (timeFilter !== 'all') {
       const cutoff =
         timeFilter === LAST_WEEK_FILTER_VALUE
-          ? new Date(now.getFullYear(), now.getMonth(), 1)
+          ? new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
           : new Date(now.getTime() - parseFloat(timeFilter) * 30 * 24 * 60 * 60 * 1000);
       filtered = allReviews.filter(r => {
         const parsed = parseDate(r.date, now);

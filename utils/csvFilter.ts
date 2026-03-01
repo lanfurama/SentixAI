@@ -56,7 +56,7 @@ const findHeaderRowIndex = (rows: string[][]): number => {
 /** Days per "month" for filter windows (Last Month = 30, etc.) */
 const DAYS_PER_MONTH = 30;
 
-/** Last Week = from 1st of current month to today (e.g. 10/02 → 01/02–10/02) */
+/** Last Week = last 7 days from today */
 const LAST_WEEK_MONTHS = 0.25;
 
 /** Serialize rows back to CSV string */
@@ -87,7 +87,7 @@ export const filterCsvByTime = (csvContent: string, months: number | 'all'): str
   const now = new Date();
   const cutoff =
     months === LAST_WEEK_MONTHS
-      ? new Date(now.getFullYear(), now.getMonth(), 1)
+      ? new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
       : new Date(now.getTime() - months * DAYS_PER_MONTH * 24 * 60 * 60 * 1000);
 
   const filteredRows = rows.slice(headerRowIdx + 1).filter(row => {
