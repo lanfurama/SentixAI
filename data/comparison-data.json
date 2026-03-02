@@ -59,25 +59,31 @@
     "service": {
       "points": [
         {
-          "text": "Hết món ăn yêu cầu, trải nghiệm không tốt.",
+          "text": "Trải nghiệm đáng thất vọng khi không gọi được món.",
           "type": "negative"
         }
       ],
-      "summary": "Dịch vụ chưa tốt, hết món ăn làm khách hàng thất vọng."
+      "summary": "Trải nghiệm gọi món không như ý vì món ăn yêu cầu đã hết."
     },
     "food": {
-      "points": [],
-      "summary": "Không có đánh giá về món ăn trong phản hồi này."
+      "points": [
+        {
+          "text": "Món avocado toast không có sẵn khi khách gọi.",
+          "type": "negative"
+        }
+      ],
+      "summary": "Thực đơn không có sẵn món khách yêu cầu, gây thất vọng."
     },
     "value": {
       "points": [],
-      "summary": "Không có đánh giá về giá cả hoặc khuyến mãi trong phản hồi này."
+      "summary": "Không có đánh giá cụ thể về giá cả sản phẩm."
     },
     "atmosphere": {
       "points": [],
-      "summary": "Không có đánh giá về không gian hoặc tiện nghi trong phản hồi này."
+      "summary": "Không có nhận xét nào về không gian của quán."
     },
     "overallRating": 1,
+    "keyTakeaway": "Trải nghiệm rất đáng thất vọng do không có món ăn mong muốn.",
     "concept": "supermarket"
   },
   {
@@ -85,29 +91,25 @@
     "location": "Mena Gourmet Market - Menas Mall Saigon Airport",
     "service": {
       "points": [],
-      "summary": "Không có đánh giá về dịch vụ."
+      "summary": "Không có nhận xét cụ thể về chất lượng dịch vụ trong đánh giá."
     },
     "food": {
       "points": [
         {
-          "text": "Nhiều hàng hóa mới lạ, độc đáo.",
-          "type": "positive"
-        },
-        {
-          "text": "60% hàng nhập khẩu chất lượng cao.",
+          "text": "Nhiều hàng hoá mới lạ, 60% là hàng nhập khẩu chất lượng.",
           "type": "positive"
         }
       ],
-      "summary": "Sản phẩm đa dạng, độc đáo, chất lượng cao, nhiều hàng nhập khẩu."
+      "summary": "Sản phẩm đa dạng với nhiều hàng nhập khẩu mới lạ, chất lượng cao."
     },
     "value": {
       "points": [
         {
-          "text": "Giá cả rất phải chăng.",
+          "text": "Giá cả được đánh giá là rất phải chăng.",
           "type": "positive"
         }
       ],
-      "summary": "Giá cả hợp lý, phải chăng so với chất lượng sản phẩm."
+      "summary": "Giá cả rất phải chăng so với chất lượng hàng hoá nhập khẩu."
     },
     "atmosphere": {
       "points": [
@@ -116,33 +118,61 @@
           "type": "positive"
         },
         {
-          "text": "Bài trí cửa hàng khá đẹp mắt.",
+          "text": "Siêu thị được bài trí khá đẹp mắt dù không quá rộng.",
           "type": "positive"
         }
       ],
-      "summary": "Không gian mua sắm sạch sẽ, thơm tho, bài trí đẹp mắt."
+      "summary": "Không gian mua sắm sạch sẽ, thơm tho và được bài trí đẹp."
     },
     "overallRating": 5,
-    "keyTakeaway": "Cửa hàng có nhiều sản phẩm nhập khẩu độc đáo, chất lượng tốt với giá phải chăng.",
+    "keyTakeaway": "Siêu thị có hàng nhập khẩu chất lượng, giá tốt và không gian đẹp.",
     "concept": "supermarket"
   },
   {
     "id": "16",
     "location": "MenaWorld - Menas Mall",
-    "concept": "supermarket",
     "service": {
-      "points": []
+      "points": [
+        {
+          "text": "Nhân viên được nhận xét là thân thiện.",
+          "type": "positive"
+        }
+      ],
+      "summary": "Nhân viên thân thiện, tạo cảm giác thoải mái cho khách hàng khi đến vui chơi."
     },
     "food": {
-      "points": []
+      "points": [
+        {
+          "text": "Có nhiều trò chơi đa dạng và hấp dẫn.",
+          "type": "positive"
+        }
+      ],
+      "summary": "Khu vui chơi cung cấp nhiều lựa chọn trò chơi đa dạng cho các bé."
     },
     "value": {
-      "points": []
+      "points": [],
+      "summary": "Không có đánh giá cụ thể về giá cả hay các chương trình khuyến mãi."
     },
     "atmosphere": {
-      "points": []
+      "points": [
+        {
+          "text": "Không gian rộng rãi và thoáng đãng.",
+          "type": "positive"
+        },
+        {
+          "text": "Khu vui chơi sạch sẽ, đảm bảo vệ sinh.",
+          "type": "positive"
+        },
+        {
+          "text": "Môi trường an toàn cho trẻ em vui chơi.",
+          "type": "positive"
+        }
+      ],
+      "summary": "Không gian rộng rãi, sạch sẽ và an toàn là điểm được đánh giá cao nhất."
     },
-    "overallRating": 0
+    "overallRating": 5,
+    "keyTakeaway": "Nổi bật với không gian vui chơi rộng rãi, sạch sẽ và an toàn cho trẻ em.",
+    "concept": "supermarket"
   },
   {
     "id": "11",
@@ -150,45 +180,41 @@
     "service": {
       "points": [
         {
-          "text": "Nhân viên thân thiện, phục vụ nhanh chóng.",
+          "text": "Trải nghiệm dịch vụ được đánh giá chung là tuyệt vời.",
           "type": "positive"
         }
       ],
-      "summary": "Dịch vụ tại Menas Mall Saigon Airport nhìn chung tốt, nhân viên thân thiện và phục vụ nhanh."
+      "summary": "Khách hàng có trải nghiệm dịch vụ chung rất tích cực và hài lòng."
     },
     "food": {
       "points": [
         {
-          "text": "Chất lượng món ăn tuyệt vời, hương vị hấp dẫn.",
+          "text": "Chất lượng sản phẩm/đồ ăn được đánh giá chung là tốt.",
           "type": "positive"
         }
       ],
-      "summary": "Thức ăn tại đây có chất lượng tốt, hương vị hấp dẫn, làm hài lòng thực khách."
+      "summary": "Đánh giá chung cho thấy sự hài lòng về chất lượng đồ ăn/sản phẩm."
     },
     "value": {
       "points": [
         {
-          "text": "Giá cả hợp lý, có nhiều chương trình khuyến mãi.",
+          "text": "Giá trị mang lại được khách hàng đánh giá cao.",
           "type": "positive"
         }
       ],
-      "summary": "Menas Mall Saigon Airport cung cấp giá trị tốt với giá cả phải chăng và ưu đãi hấp dẫn."
+      "summary": "Khách hàng cảm thấy hài lòng với giá trị nhận được tại đây."
     },
     "atmosphere": {
       "points": [
         {
-          "text": "Không gian sạch sẽ, trang trí đẹp mắt.",
-          "type": "positive"
-        },
-        {
-          "text": "Tiện nghi đầy đủ, đáp ứng nhu cầu khách hàng.",
+          "text": "Không gian chung được đánh giá là tuyệt vời và dễ chịu.",
           "type": "positive"
         }
       ],
-      "summary": "Không gian sạch sẽ, trang trí đẹp mắt cùng tiện nghi đầy đủ tạo trải nghiệm tốt."
+      "summary": "Không gian của trung tâm thương mại nhận được phản hồi tích cực chung."
     },
     "overallRating": 5,
-    "keyTakeaway": "Menas Mall Saigon Airport nhận được đánh giá cao về mọi mặt, đặc biệt là dịch vụ và không gian.",
+    "keyTakeaway": "Khách hàng có trải nghiệm chung rất tuyệt vời tại trung tâm thương mại.",
     "concept": "supermarket"
   },
   {
@@ -233,36 +259,36 @@
     "service": {
       "points": [
         {
-          "text": "Chỗ để xe tiện lợi.",
+          "text": "Chỗ để xe được nhận xét là tiện lợi.",
           "type": "positive"
         }
       ],
-      "summary": "Dịch vụ tiện lợi, đặc biệt là chỗ để xe rộng rãi."
+      "summary": "Khách hàng hài lòng với sự tiện lợi của chỗ để xe tại cửa hàng."
     },
     "food": {
       "points": [
         {
-          "text": "Hàng hóa phong phú, đa dạng.",
+          "text": "Hàng hóa tại cửa hàng rất phong phú, đa dạng.",
           "type": "positive"
         }
       ],
-      "summary": "Sản phẩm đa dạng, phong phú, đáp ứng nhiều nhu cầu."
+      "summary": "Sự đa dạng và phong phú của hàng hóa là điểm mạnh nổi bật."
     },
     "value": {
       "points": [
         {
-          "text": "Giá cả hơi cao.",
+          "text": "Giá cả sản phẩm bị cho là hơi đắt.",
           "type": "negative"
         }
       ],
-      "summary": "Giá cả có phần cao hơn so với mặt bằng chung."
+      "summary": "Giá cả được xem là một điểm trừ vì hơi cao so với mong đợi."
     },
     "atmosphere": {
       "points": [],
-      "summary": "Không có đánh giá về không gian, trang trí hay tiện nghi."
+      "summary": "Không có đánh giá nào về không gian hay cơ sở vật chất."
     },
     "overallRating": 4,
-    "keyTakeaway": "Sản phẩm đa dạng, tiện lợi nhưng giá hơi cao.",
+    "keyTakeaway": "Sản phẩm đa dạng và đậu xe tiện lợi nhưng giá cả hơi cao.",
     "concept": "supermarket"
   },
   {
@@ -307,69 +333,65 @@
     "service": {
       "points": [
         {
-          "text": "Nhân viên thái độ, thiếu rõ ràng thông tin.",
+          "text": "Thời gian chờ thanh toán và lấy xe rất lâu, gây phiền toái.",
           "type": "negative"
         },
         {
-          "text": "Chỗ giữ xe đắt, thu phí không hợp lý.",
+          "text": "Nhân viên bị phàn nàn về thái độ và thiếu hỗ trợ khách hàng.",
           "type": "negative"
         },
         {
-          "text": "Cổng check out lâu, đợi lấy xe mất thời gian.",
+          "text": "Chính sách phí gửi xe thay đổi nhưng không thông báo rõ ràng.",
           "type": "negative"
         }
       ],
-      "summary": "Dịch vụ khách hàng và bãi giữ xe của siêu thị còn nhiều điểm trừ, gây trải nghiệm không tốt."
+      "summary": "Dịch vụ bị đánh giá rất tệ do thời gian chờ lâu và thái độ nhân viên."
     },
     "food": {
       "points": [
         {
-          "text": "Siêu thị có nhiều thực phẩm tươi sống, đồ Hàn Quốc.",
+          "text": "Hàng hóa đa dạng, phong phú, nhiều sản phẩm chất lượng từ Hàn Quốc.",
           "type": "positive"
         },
         {
-          "text": "Khu ẩm thực đa dạng món ăn.",
+          "text": "Khu ẩm thực (food court) có nhiều lựa chọn món ăn hấp dẫn.",
           "type": "positive"
         }
       ],
-      "summary": "Siêu thị cung cấp đa dạng thực phẩm tươi sống và món ăn hấp dẫn."
+      "summary": "Sản phẩm đa dạng, chất lượng tốt, đặc biệt có nhiều hàng hóa Hàn Quốc."
     },
     "value": {
       "points": [
         {
-          "text": "Giá giữ xe cao hơn các nơi khác.",
+          "text": "Phí giữ xe bị cho là cao hơn các trung tâm thương mại khác.",
           "type": "negative"
         },
         {
-          "text": "Không còn giữ xe miễn phí như trước.",
-          "type": "negative"
-        },
-        {
-          "text": "Giá cả có thể cao hơn siêu thị khác.",
+          "text": "Bị tính thêm tiền gửi xe do phải xếp hàng chờ thanh toán lâu.",
           "type": "negative"
         }
       ],
-      "summary": "Chi phí giữ xe và giá sản phẩm có thể cao hơn, cần cân nhắc."
+      "summary": "Giá trị bị đánh giá thấp chủ yếu do phí gửi xe cao và bất cập."
     },
     "atmosphere": {
       "points": [
         {
-          "text": "Siêu thị rộng rãi, hiện đại, sạch sẽ.",
+          "text": "Không gian mua sắm rộng rãi, sạch sẽ và hiện đại.",
           "type": "positive"
         },
         {
-          "text": "Có nhiều tiện ích: ATM, khu vui chơi.",
-          "type": "positive"
+          "text": "Siêu thị rất đông đúc, thường xuyên chen lấn, đặc biệt cuối tuần.",
+          "type": "negative"
         },
         {
-          "text": "Không gian mua sắm thoải mái.",
-          "type": "positive"
+          "text": "Bãi giữ xe tệ, một phần không có mái che nắng.",
+          "type": "negative"
         }
       ],
-      "summary": "Không gian mua sắm rộng rãi, hiện đại, sạch sẽ với nhiều tiện ích đi kèm."
+      "summary": "Không gian rộng rãi nhưng thường xuyên quá đông, bãi xe còn hạn chế."
     },
-    "overallRating": 3,
-    "keyTakeaway": "Siêu thị có không gian tốt nhưng dịch vụ và chi phí giữ xe cần cải thiện đáng kể.",
+    "overallRating": 2.5,
+    "keyTakeaway": "Trải nghiệm khách hàng rất tệ do vấn đề gửi xe và chờ thanh toán quá lâu.",
     "concept": "supermarket"
   },
   {
@@ -382,44 +404,44 @@
           "type": "positive"
         },
         {
-          "text": "Dịch vụ xuất sắc, chăm sóc khách hàng tận tình.",
+          "text": "Dịch vụ được đánh giá rất cao, 10/10.",
           "type": "positive"
         }
       ],
-      "summary": "Dịch vụ tại nhà hàng được đánh giá cao, nhân viên thân thiện và chuyên nghiệp."
+      "summary": "Nhân viên phục vụ rất chu đáo, chuyên nghiệp và được đánh giá cao."
     },
     "food": {
       "points": [
         {
-          "text": "Món ăn ngon, chuẩn vị Ý, hợp khẩu vị.",
+          "text": "Đồ ăn ngon, hợp khẩu vị và chuẩn vị Ý.",
           "type": "positive"
         },
         {
-          "text": "Chất lượng món ăn tuyệt vời, hương vị hấp dẫn.",
+          "text": "Thực khách đánh giá đồ ăn rất ngon và tuyệt vời.",
           "type": "positive"
         }
       ],
-      "summary": "Đồ ăn ngon, chuẩn vị Ý, chất lượng tuyệt vời và hợp khẩu vị thực khách."
+      "summary": "Đồ ăn được khen ngon, hợp khẩu vị và mang đậm hương vị Ý."
     },
     "value": {
       "points": [],
-      "summary": "Không có đánh giá cụ thể về giá cả hoặc khuyến mãi."
+      "summary": "Không có đánh giá cụ thể về giá cả hay khuyến mãi."
     },
     "atmosphere": {
       "points": [
         {
-          "text": "Không gian ấm áp, dễ thương, trang trí đẹp.",
+          "text": "Không gian ấm cúng, dễ thương và đẹp.",
           "type": "positive"
         },
         {
-          "text": "Nhà hàng sạch sẽ, có không khí dễ chịu.",
+          "text": "Nhà hàng có không khí và trang trí đẹp, dễ chịu.",
           "type": "positive"
         }
       ],
-      "summary": "Không gian nhà hàng ấm áp, dễ thương, sạch sẽ và có không khí tốt."
+      "summary": "Không gian nhà hàng được nhận xét là ấm cúng, dễ thương và đẹp."
     },
     "overallRating": 5,
-    "keyTakeaway": "Nhà hàng Don Cipriani's nhận được đánh giá cao về món ăn ngon, dịch vụ xuất sắc và không gian ấm cúng.",
+    "keyTakeaway": "Nhà hàng nổi bật với đồ ăn ngon, dịch vụ xuất sắc và không gian ấm cúng.",
     "concept": "dining"
   },
   {
@@ -500,45 +522,45 @@
     "service": {
       "points": [
         {
-          "text": "Nhân viên nhiệt tình, chuyên nghiệp, hỗ trợ chu đáo.",
+          "text": "Nhân viên tư vấn nhiệt tình, chu đáo và chuyên nghiệp.",
           "type": "positive"
         },
         {
-          "text": "Nhân viên tư vấn tốt, xinh đẹp.",
+          "text": "Nhân viên Phương Ánh được khen ngợi vì sự tận tâm.",
           "type": "positive"
         }
       ],
-      "summary": "Nhân viên Mena Cosmetics & Perfumes rất nhiệt tình, chuyên nghiệp và tư vấn tốt."
+      "summary": "Nhân viên được đánh giá cao về sự nhiệt tình, chuyên nghiệp và chu đáo."
     },
     "food": {
       "points": [
         {
-          "text": "Sản phẩm đa dạng, nhiều mẫu mã nước hoa.",
+          "text": "Sản phẩm đa dạng, nhiều mẫu mã nước hoa để lựa chọn.",
           "type": "positive"
         }
       ],
-      "summary": "Cửa hàng có đa dạng sản phẩm, đặc biệt là nước hoa với nhiều mẫu mã."
+      "summary": "Cửa hàng cung cấp sản phẩm đa dạng với nhiều mẫu mã phong phú."
     },
     "value": {
       "points": [
         {
-          "text": "Giá cả hợp lý.",
+          "text": "Giá cả được nhận xét là hợp lý.",
           "type": "positive"
         }
       ],
-      "summary": "Mena Cosmetics & Perfumes có giá cả hợp lý, phù hợp với chất lượng sản phẩm."
+      "summary": "Khách hàng nhận thấy mức giá của các sản phẩm hợp lý."
     },
     "atmosphere": {
       "points": [
         {
-          "text": "Không gian đẹp, gọn gàng, thoáng mát.",
+          "text": "Không gian cửa hàng đẹp, gọn gàng và thoáng mát.",
           "type": "positive"
         }
       ],
-      "summary": "Không gian cửa hàng Mena Cosmetics & Perfumes đẹp, gọn gàng và thoáng mát."
+      "summary": "Không gian mua sắm được khen ngợi vì sạch sẽ, đẹp và thoáng đãng."
     },
     "overallRating": 5,
-    "keyTakeaway": "Trải nghiệm mua sắm tuyệt vời với dịch vụ, sản phẩm và không gian xuất sắc.",
+    "keyTakeaway": "Điểm mạnh nổi bật là đội ngũ nhân viên chuyên nghiệp, nhiệt tình và chu đáo.",
     "concept": "retail"
   },
   {
@@ -547,67 +569,78 @@
     "service": {
       "points": [
         {
-          "text": "Nhân viên vui vẻ, thân thiện và nhiệt tình.",
-          "type": "positive"
-        },
-        {
-          "text": "Nhân viên nam tư vấn tốt, quần áo đa dạng.",
+          "text": "Nhân viên được khen vui vẻ, thân thiện và nhiệt tình.",
           "type": "positive"
         }
       ],
-      "summary": "Nhân viên thân thiện, nhiệt tình, tư vấn tốt, sản phẩm đa dạng."
+      "summary": "Nhân viên được đánh giá cao về thái độ phục vụ thân thiện, nhiệt tình."
     },
     "food": {
-      "points": [],
-      "summary": "Không có đánh giá về đồ ăn hoặc sản phẩm cụ thể."
+      "points": [
+        {
+          "text": "Quần áo và giày dép đa dạng, mẫu mã đẹp.",
+          "type": "positive"
+        }
+      ],
+      "summary": "Sản phẩm quần áo và giày dép được khen đa dạng, mẫu mã đẹp."
     },
     "value": {
       "points": [],
-      "summary": "Không có đánh giá về giá cả hoặc khuyến mãi."
+      "summary": "Không có đánh giá nào về giá cả hoặc chương trình khuyến mãi."
     },
     "atmosphere": {
       "points": [
         {
-          "text": "Không gian rộng rãi, sạch đẹp.",
-          "type": "positive"
-        },
-        {
-          "text": "Nhiều mẫu giày đẹp.",
+          "text": "Không gian cửa hàng rộng rãi, sạch sẽ và đẹp.",
           "type": "positive"
         }
       ],
-      "summary": "Không gian cửa hàng rộng rãi, sạch sẽ, nhiều mẫu mã đẹp."
+      "summary": "Không gian mua sắm được nhận xét là rộng rãi và sạch đẹp."
     },
     "overallRating": 5,
-    "keyTakeaway": "Cửa hàng có dịch vụ tốt, không gian đẹp và nhiều sản phẩm đa dạng.",
+    "keyTakeaway": "Cửa hàng được yêu thích nhờ nhân viên nhiệt tình và sản phẩm đẹp.",
     "concept": "retail"
   },
   {
     "id": "22",
     "location": "Saigon Oxford Bookstore - Menas Mall Saigon Airport",
     "service": {
-      "points": [],
-      "summary": ""
+      "points": [
+        {
+          "text": "Nhân viên phục vụ tốt, thân thiện và dễ thương.",
+          "type": "positive"
+        }
+      ],
+      "summary": "Nhân viên được đánh giá cao về thái độ phục vụ tốt và thân thiện."
     },
     "food": {
-      "points": [],
-      "summary": ""
+      "points": [
+        {
+          "text": "Có nhiều lựa chọn sách hay, đặc biệt là sách tiếng Anh.",
+          "type": "positive"
+        }
+      ],
+      "summary": "Nhà sách có nhiều đầu sách đa dạng, nổi bật là sách tiếng Anh."
     },
     "value": {
       "points": [],
-      "summary": ""
+      "summary": "Không có đánh giá nào về giá cả hay các chương trình khuyến mãi."
     },
     "atmosphere": {
       "points": [
         {
-          "text": "Nhà sách đẹp, không gian mát mẻ, thoáng đãng.",
+          "text": "Không gian đẹp, trang trí và bố trí hợp lý.",
+          "type": "positive"
+        },
+        {
+          "text": "Nhà sách thơm, thoáng đãng và mát mẻ.",
           "type": "positive"
         }
       ],
-      "summary": "Không gian nhà sách đẹp, mát mẻ, tạo cảm giác dễ chịu cho khách hàng."
+      "summary": "Không gian nhà sách được khen ngợi vì đẹp, thơm và thoáng mát."
     },
     "overallRating": 5,
-    "keyTakeaway": "",
+    "keyTakeaway": "Nhà sách nổi bật với không gian đẹp, thoáng mát và nhân viên thân thiện.",
     "concept": "retail"
   },
   {
@@ -616,61 +649,61 @@
     "service": {
       "points": [
         {
-          "text": "Nhân viên nhiệt tình, chủ động hỗ trợ khách hàng.",
+          "text": "Nhân viên nhiệt tình, thân thiện và chủ động hỗ trợ khách hàng.",
           "type": "positive"
         },
         {
-          "text": "Phục vụ thiếu chuyên nghiệp, cần đào tạo lại nhân viên.",
+          "text": "Bãi đỗ xe trên lầu được khách hàng yêu thích.",
+          "type": "positive"
+        },
+        {
+          "text": "Cần đào tạo lại thái độ phục vụ cho một số nhân viên.",
           "type": "negative"
-        },
-        {
-          "text": "Nhân viên thân thiện, chuyên nghiệp, phòng chiếu sạch sẽ.",
-          "type": "positive"
         }
       ],
-      "summary": "Nhân viên nhìn chung thân thiện, nhiệt tình nhưng cần cải thiện cách phục vụ chuyên nghiệp hơn."
+      "summary": "Nhân viên đa số thân thiện, nhiệt tình nhưng cần cải thiện tính chuyên nghiệp."
     },
     "food": {
       "points": [
         {
-          "text": "Croissant dâu ngon tuyệt, vỏ giòn, kem béo mịn.",
+          "text": "Croissant dâu được khen rất ngon, vỏ giòn, kem béo không ngấy.",
           "type": "positive"
         },
         {
-          "text": "Đồ ăn khá ổn, vừa miệng.",
+          "text": "Đồ ăn được đánh giá khá ổn và vừa miệng.",
+          "type": "positive"
+        },
+        {
+          "text": "Đồ uống ngon và chất lượng pha chế ổn định.",
           "type": "positive"
         }
       ],
-      "summary": "Đồ ăn và bánh ngọt tại Lotte Mart Gò Vấp được đánh giá cao về hương vị và chất lượng."
+      "summary": "Đồ ăn và thức uống được đánh giá cao, đặc biệt là bánh croissant."
     },
     "value": {
       "points": [
         {
-          "text": "Giá hợp lý so với mặt bằng chung.",
+          "text": "Giá cả được cho là hợp lý so với mặt bằng chung.",
           "type": "positive"
         }
       ],
-      "summary": "Mức giá được cho là hợp lý, phù hợp với chất lượng sản phẩm và dịch vụ."
+      "summary": "Giá cả được khách hàng đánh giá là hợp lý và phải chăng."
     },
     "atmosphere": {
       "points": [
         {
-          "text": "Quán dễ thương, ảnh nét.",
+          "text": "Rạp chiếu phim được khen rộng rãi và sạch sẽ.",
           "type": "positive"
         },
         {
-          "text": "Rạp sạch sẽ, phòng chiếu rộng.",
-          "type": "positive"
-        },
-        {
-          "text": "Thích bãi đỗ xe trên lầu.",
+          "text": "Không gian các cửa hàng và rạp chiếu phim sạch sẽ, ổn.",
           "type": "positive"
         }
       ],
-      "summary": "Không gian quán sạch sẽ, dễ thương, phòng chiếu rộng rãi và bãi đỗ xe tiện lợi."
+      "summary": "Không gian sạch sẽ, đặc biệt là khu vực rạp chiếu phim rộng rãi."
     },
     "overallRating": 4.8,
-    "keyTakeaway": "Lotte Mart Gò Vấp nhận được nhiều đánh giá tích cực về sản phẩm, không gian và sự nhiệt tình của nhân viên.",
+    "keyTakeaway": "Nơi mua sắm lý tưởng với nhân viên thân thiện và đồ ăn ngon.",
     "concept": "supermarket"
   },
   {
@@ -679,65 +712,57 @@
     "service": {
       "points": [
         {
-          "text": "Giao hàng chậm, đóng gói lâu, thiếu hàng.",
+          "text": "Giao hàng online chậm, hỗ trợ khách hàng kém.",
           "type": "negative"
         },
         {
-          "text": "Nhân viên an ninh có thái độ khinh thường khách.",
+          "text": "Nhân viên an ninh bị phàn nàn về thái độ khinh thường khách.",
           "type": "negative"
         },
         {
-          "text": "Nhân viên thân thiện và nhiệt tình.",
+          "text": "Có bãi đỗ xe miễn phí nếu có hóa đơn mua hàng.",
           "type": "positive"
         }
       ],
-      "summary": "Dịch vụ giao hàng và thái độ nhân viên an ninh cần cải thiện, dù có nhân viên thân thiện."
+      "summary": "Dịch vụ có điểm cộng về bãi xe nhưng gây thất vọng về giao hàng và nhân viên."
     },
     "food": {
       "points": [
         {
-          "text": "Hàng hóa đa dạng, nhiều lựa chọn mua sắm.",
+          "text": "Hàng hóa, sản phẩm đa dạng và phong phú.",
           "type": "positive"
         },
         {
-          "text": "Có thể mua nhiều loại hàng hóa với giá tốt.",
-          "type": "positive"
+          "text": "Các mặt hàng phổ biến thường hết khi đặt hàng online.",
+          "type": "negative"
         }
       ],
-      "summary": "Siêu thị có hàng hóa đa dạng, phong phú, đáp ứng nhiều nhu cầu mua sắm của khách hàng."
+      "summary": "Sản phẩm đa dạng nhưng tình trạng hết hàng online là một vấn đề cần lưu ý."
     },
     "value": {
       "points": [
         {
-          "text": "Giá cả chấp nhận được.",
-          "type": "positive"
-        },
-        {
-          "text": "Bãi đỗ xe miễn phí khi có hóa đơn.",
+          "text": "Giá cả được đánh giá là hợp lý và phải chăng.",
           "type": "positive"
         }
       ],
-      "summary": "Giá cả hợp lý, có ưu đãi bãi đỗ xe miễn phí, tạo lợi ích cho người mua sắm."
+      "summary": "Giá cả hợp lý là một điểm mạnh, thu hút nhiều khách hàng mua sắm."
     },
     "atmosphere": {
       "points": [
         {
-          "text": "Không gian thoáng đãng, ngay mặt tiền đường lớn.",
+          "text": "Không gian mua sắm rộng rãi và thoáng đãng.",
           "type": "positive"
         },
         {
-          "text": "Có nhiều cửa hàng và khu vực ăn uống.",
-          "type": "positive"
-        },
-        {
-          "text": "Không gian ngồi ngoài trời thư giãn.",
+          "text": "Vị trí thuận lợi ngay tại một giao lộ lớn.",
           "type": "positive"
         }
       ],
-      "summary": "Không gian thoáng đãng, tiện nghi, có nhiều tiện ích mua sắm, ăn uống và thư giãn."
+      "summary": "Không gian thoáng đãng cùng vị trí đắc địa mang lại trải nghiệm mua sắm tốt."
     },
-    "overallRating": 3.7,
-    "keyTakeaway": "Dịch vụ giao hàng và thái độ nhân viên cần cải thiện, nhưng không gian và sự đa dạng hàng hóa là điểm cộng.",
+    "overallRating": 3.9,
+    "keyTakeaway": "Sản phẩm đa dạng giá tốt nhưng dịch vụ giao hàng và thái độ nhân viên cần cải thiện.",
     "concept": "supermarket"
   },
   {
@@ -746,69 +771,61 @@
     "service": {
       "points": [
         {
-          "text": "Nhân viên tư vấn nhiệt tình, hỗ trợ tốt.",
+          "text": "Dịch vụ được đánh giá tốt hơn các trung tâm khác.",
           "type": "positive"
         },
         {
-          "text": "Kiến trúc và dịch vụ vượt trội so với mall khác.",
+          "text": "Nhân viên bán hàng tư vấn nhiệt tình, chu đáo.",
           "type": "positive"
         },
         {
-          "text": "Giữ xe thuận tiện, không gian thoáng mát.",
+          "text": "Bãi giữ xe thuận tiện và dễ dàng di chuyển.",
           "type": "positive"
         }
       ],
-      "summary": "Dịch vụ và không gian tại Aeon Mall Tân Phú được đánh giá cao, mang lại trải nghiệm tốt."
+      "summary": "Dịch vụ được đánh giá cao, nhân viên nhiệt tình và bãi giữ xe thuận tiện."
     },
     "food": {
       "points": [
         {
-          "text": "Khu ẩm thực đa dạng món Việt, Nhật, Hàn.",
+          "text": "Khu ẩm thực đa dạng, quy tụ nhiều món ăn ngon.",
           "type": "positive"
         },
         {
-          "text": "Nhiều lựa chọn ăn uống ngon, giá hợp lý.",
-          "type": "positive"
-        },
-        {
-          "text": "Siêu thị Nhật có hàng hóa chất lượng cao.",
+          "text": "Hàng hóa trong siêu thị Nhật có chất lượng cao.",
           "type": "positive"
         }
       ],
-      "summary": "Ẩm thực phong phú, chất lượng tốt với giá cả phải chăng là điểm cộng lớn."
+      "summary": "Khu ẩm thực đa dạng với nhiều lựa chọn chất lượng, phù hợp nhiều khẩu vị."
     },
     "value": {
       "points": [
         {
-          "text": "Giá cả hợp lý cho nhiều món ăn ngon.",
-          "type": "positive"
-        },
-        {
-          "text": "Có nhiều lựa chọn mua sắm và giải trí.",
+          "text": "Giá cả tại khu ẩm thực được đánh giá hợp lý.",
           "type": "positive"
         }
       ],
-      "summary": "Aeon Mall Tân Phú cung cấp giá trị tốt với nhiều lựa chọn mua sắm và ăn uống."
+      "summary": "Giá cả tại khu ẩm thực được nhận xét là hợp lý và dễ tiếp cận."
     },
     "atmosphere": {
       "points": [
         {
-          "text": "Không gian rộng rãi, sạch sẽ, dễ chịu.",
+          "text": "Không gian rộng rãi, sạch sẽ và cực kỳ thoáng mát.",
           "type": "positive"
         },
         {
-          "text": "Trang trí đẹp, bố trí khoa học, đi lại thoải mái.",
+          "text": "Kiến trúc và cách trang trí được khen ngợi là đẹp.",
           "type": "positive"
         },
         {
-          "text": "Phù hợp cho gia đình, bạn bè, hẹn hò.",
+          "text": "Nhiều tiện ích giải trí như rạp phim, khu vui chơi.",
           "type": "positive"
         }
       ],
-      "summary": "Không gian Aeon Mall Tân Phú thoáng đãng, sạch sẽ, trang trí đẹp, rất đáng để ghé thăm."
+      "summary": "Không gian rộng rãi, sạch sẽ, thoáng mát với nhiều tiện ích giải trí đa dạng."
     },
     "overallRating": 4.7,
-    "keyTakeaway": "Aeon Mall Tân Phú nổi bật với không gian đẹp, dịch vụ tốt và ẩm thực đa dạng.",
+    "keyTakeaway": "Điểm đến lý tưởng cho gia đình và bạn bè với không gian và dịch vụ tốt.",
     "concept": "supermarket"
   },
   {
@@ -817,65 +834,61 @@
     "service": {
       "points": [
         {
-          "text": "Nhân viên hỗ trợ tìm vị trí cửa hàng rất hữu ích.",
-          "type": "positive"
-        },
-        {
-          "text": "Nhân viên quầy đổi voucher và nhân viên Unilever thái độ tệ.",
+          "text": "Nhân viên một số quầy có thái độ hằn học, coi thường khách.",
           "type": "negative"
         },
         {
-          "text": "Bãi đậu xe rộng rãi, tiện lợi.",
+          "text": "Dịch vụ đổi voucher cho khách rất tệ và gây khó dễ.",
+          "type": "negative"
+        },
+        {
+          "text": "Bãi đậu xe tiện lợi, có quầy hỗ trợ thông tin cho khách.",
           "type": "positive"
         }
       ],
-      "summary": "Dịch vụ nhìn chung tốt, có điểm cộng bãi đậu xe nhưng cần cải thiện thái độ nhân viên."
+      "summary": "Dịch vụ khách hàng không đồng đều, nhiều phàn nàn về thái độ nhân viên."
     },
     "food": {
       "points": [
         {
-          "text": "Khu ẩm thực đa dạng món Việt, Nhật, giá hợp lý.",
+          "text": "Khu ẩm thực đa dạng với nhiều lựa chọn món ăn sạch sẽ.",
           "type": "positive"
         },
         {
-          "text": "Siêu thị có nhiều hàng hóa, thực phẩm tươi ngon.",
+          "text": "Siêu thị đầy đủ hàng hóa, nổi bật với thực phẩm tươi ngon.",
           "type": "positive"
         }
       ],
-      "summary": "Ẩm thực đa dạng, giá cả hợp lý, siêu thị đầy đủ hàng hóa chất lượng."
+      "summary": "Đồ ăn và hàng hóa đa dạng, chất lượng tốt và sạch sẽ."
     },
     "value": {
       "points": [
         {
-          "text": "Giá cả hợp lý, phù hợp nhiều đối tượng.",
-          "type": "positive"
-        },
-        {
-          "text": "Có nhiều chương trình khuyến mãi hấp dẫn.",
+          "text": "Giá cả được đánh giá là hợp lý và tốt.",
           "type": "positive"
         }
       ],
-      "summary": "Giá cả hợp lý và có nhiều ưu đãi, khuyến mãi thu hút khách hàng."
+      "summary": "Giá cả hợp lý, phù hợp với nhiều đối tượng khách hàng mua sắm."
     },
     "atmosphere": {
       "points": [
         {
-          "text": "Không gian rộng rãi, thoáng mát, sạch sẽ, hiện đại.",
+          "text": "Không gian rộng rãi, thoáng đãng, sạch sẽ và được bố trí khoa học.",
           "type": "positive"
         },
         {
-          "text": "Bố trí khoa học, dễ di chuyển, nhiều khu vực nghỉ chân.",
-          "type": "positive"
+          "text": "Một số khu vực đông đúc, quán cà phê hết chỗ ngồi.",
+          "type": "negative"
         },
         {
-          "text": "Nhà vệ sinh nam hư vòi nước.",
+          "text": "Cơ sở vật chất như nhà vệ sinh đôi khi bị hư hỏng.",
           "type": "negative"
         }
       ],
-      "summary": "Trung tâm thương mại hiện đại, sạch sẽ, bố trí khoa học, tiện nghi."
+      "summary": "Không gian rộng rãi và sạch sẽ nhưng tiện ích cần được bảo trì tốt hơn."
     },
-    "overallRating": 3.8,
-    "keyTakeaway": "Trung tâm thương mại rộng rãi, hiện đại với nhiều dịch vụ, ẩm thực đa dạng.",
+    "overallRating": 3.4,
+    "keyTakeaway": "Không gian mua sắm tốt nhưng trải nghiệm khách hàng bị ảnh hưởng bởi dịch vụ yếu kém.",
     "concept": "supermarket"
   },
   {
@@ -884,39 +897,44 @@
     "service": {
       "points": [
         {
-          "text": "Nhân viên sáng sớm thái độ không tốt, thiếu nhiệt tình.",
+          "text": "Nhân viên có thái độ quạo quọ, nạt nộ với khách hàng.",
+          "type": "negative"
+        },
+        {
+          "text": "Có tầng hầm gửi xe tiện lợi cho khách hàng.",
+          "type": "positive"
+        }
+      ],
+      "summary": "Dịch vụ không nhất quán, có bãi giữ xe tiện lợi nhưng thái độ nhân viên tệ."
+    },
+    "food": {
+      "points": [
+        {
+          "text": "Trung tâm có nhiều hàng hoá đa dạng và dễ mua sắm.",
+          "type": "positive"
+        },
+        {
+          "text": "Một số khách hàng cảm thấy không có quá nhiều quầy hàng.",
           "type": "negative"
         }
       ],
-      "summary": "Thái độ nhân viên phục vụ cần cải thiện, đặc biệt vào buổi sáng."
-    },
-    "food": {
-      "points": [],
-      "summary": "Không có đánh giá cụ thể về món ăn hoặc chất lượng sản phẩm."
+      "summary": "Nhiều hàng hoá đa dạng nhưng một số khách thấy số lượng quầy hàng còn hạn chế."
     },
     "value": {
       "points": [],
-      "summary": "Không có thông tin về giá cả, khuyến mãi hay giá trị nhận được."
+      "summary": "Không có đánh giá nào đề cập đến giá cả hoặc khuyến mãi."
     },
     "atmosphere": {
       "points": [
         {
-          "text": "Trung tâm có nhiều hàng hóa, dễ dàng mua sắm.",
-          "type": "positive"
-        },
-        {
-          "text": "Tầng hầm gửi xe tiện lợi.",
-          "type": "positive"
-        },
-        {
-          "text": "Cuối tuần khá đông đúc.",
+          "text": "Không gian khá đông đúc, đặc biệt là vào các ngày cuối tuần.",
           "type": "negative"
         }
       ],
-      "summary": "Trung tâm mua sắm tiện lợi với chỗ đậu xe tốt, nhưng đông vào cuối tuần."
+      "summary": "Không gian thường đông đúc vào cuối tuần, có thể gây bất tiện cho khách hàng."
     },
     "overallRating": 2.5,
-    "keyTakeaway": "Cần cải thiện thái độ phục vụ khách hàng, đặc biệt vào giờ cao điểm.",
+    "keyTakeaway": "Trải nghiệm không đồng đều, dịch vụ khách hàng cần được cải thiện đáng kể.",
     "concept": "supermarket"
   },
   {
@@ -925,65 +943,65 @@
     "service": {
       "points": [
         {
-          "text": "Nhân viên nhiệt tình, vui vẻ, hỗ trợ khách hàng tốt.",
+          "text": "Nhân viên được nhận xét là nhiệt tình và vui vẻ.",
           "type": "positive"
-        },
-        {
-          "text": "Vị trí khó tiếp cận do đường một chiều, xe đông.",
-          "type": "negative"
         }
       ],
-      "summary": "Nhân viên thân thiện, nhưng vị trí hơi khó đi lại do giao thông."
+      "summary": "Nhân viên tại siêu thị được đánh giá là nhiệt tình và thân thiện."
     },
     "food": {
       "points": [
         {
-          "text": "Bán chè hết hạn sử dụng, gây nguy hiểm cho sức khỏe.",
-          "type": "negative"
+          "text": "Mặt hàng phong phú, đa dạng sản phẩm.",
+          "type": "positive"
         },
         {
-          "text": "Mặt hàng phong phú, đa dạng lựa chọn cho khách hàng.",
+          "text": "Có khu vực ăn uống tại chỗ với nhiều món ăn.",
           "type": "positive"
+        },
+        {
+          "text": "Có phản ánh về thực phẩm giảm giá bị hỏng, ôi thiu.",
+          "type": "negative"
         }
       ],
-      "summary": "Cần cải thiện chất lượng thực phẩm, tránh bán hàng hết hạn."
+      "summary": "Hàng hóa đa dạng nhưng cần chú ý chất lượng thực phẩm giảm giá."
     },
     "value": {
       "points": [
         {
-          "text": "Có nhiều chương trình khuyến mãi hấp dẫn hàng tháng.",
+          "text": "Giá cả được đánh giá là ổn định.",
           "type": "positive"
         },
         {
-          "text": "Giảm giá sâu vào buổi tối sau 9 giờ.",
+          "text": "Thường xuyên có chương trình khuyến mãi hàng tháng.",
           "type": "positive"
         },
         {
-          "text": "Giá cả ổn định, phù hợp với chất lượng sản phẩm.",
+          "text": "Thức ăn chế biến sẵn thường giảm giá sau 9 giờ tối.",
           "type": "positive"
         }
       ],
-      "summary": "Giá cả hợp lý, nhiều ưu đãi hấp dẫn, đặc biệt vào cuối ngày."
+      "summary": "Giá cả ổn định và có nhiều chương trình khuyến mãi hấp dẫn."
     },
     "atmosphere": {
       "points": [
         {
-          "text": "Địa điểm đẹp, rộng rãi, thoáng mát.",
+          "text": "Không gian rộng rãi, thoáng mát và sạch sẽ.",
           "type": "positive"
         },
         {
-          "text": "Có khu vực ăn uống tại chỗ tiện lợi.",
+          "text": "Siêu thị đông đúc, thu hút nhiều người mua sắm.",
           "type": "positive"
         },
         {
-          "text": "Siêu thị đông đúc, nhiều người mua sắm.",
-          "type": "positive"
+          "text": "Vị trí khó tiếp cận do giao thông đông và đường một chiều.",
+          "type": "negative"
         }
       ],
-      "summary": "Không gian rộng rãi, sạch sẽ, có khu ăn uống tiện lợi."
+      "summary": "Không gian rộng rãi, thoáng đãng nhưng vị trí hơi khó tiếp cận."
     },
-    "overallRating": 3.67,
-    "keyTakeaway": "Cần chú trọng chất lượng thực phẩm, cải thiện lối vào để thu hút khách hàng hơn.",
+    "overallRating": 3.7,
+    "keyTakeaway": "Nơi mua sắm đa dạng với giá tốt, nhưng cần kiểm tra kỹ thực phẩm giảm giá.",
     "concept": "supermarket"
   }
 ]
